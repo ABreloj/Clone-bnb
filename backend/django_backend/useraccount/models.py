@@ -10,7 +10,7 @@ class CustomUserManager(UserManager):
             raise ValueError("No has especificado email")
 
         email = self.normalize_email(email)
-        user = self.model(email=email, name=name, **extra_fields)
+        user = self.model(email=email, name=name, **extra_field)
         user.save(using=self.db)
 
         return user

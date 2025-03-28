@@ -1,10 +1,11 @@
-from rest_framework import serilizers
+from rest_framework import serializers
+                           
 
 from .models import Property
 
 from useraccount.serializers import UserDetailSerializer
 
-class PropertiesListSerializer(seriaLizers.ModelSerializer):
+class PropertiesListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Property
         fields = (
@@ -14,8 +15,10 @@ class PropertiesListSerializer(seriaLizers.ModelSerializer):
             'image_url',
         )
 
+
 class PropertiesDetailSerializer(serializers.ModelSerializer):
     landord = UserDetailSerializer(read_only=True, many=False)
+
     class Meta:
         model = Property
         fields = (
@@ -28,4 +31,14 @@ class PropertiesDetailSerializer(serializers.ModelSerializer):
             'baños',
             'invitados',
             'landlord'
+        )
+
+
+class ReservationsListSerializer(serilizers.ModelSerializer):
+    property = PropertiesListSerializer(read_only=True, many=False)
+    
+    class meta:
+        model = Reservation
+        fields = (
+            'id', 'start_date', 'end_date', 'number_of_nights', 'total_price', 'property'
         )
