@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from res_framework_simplejwt.token import AccessToken
+from rest_framework_simplejwt.token import AccessToken
 from .forms import PropertyForm
 from .models import Property, Reservation
 from .serializers import PropertiesListSerializer, PropertiesDetailSerializer, ReservationsListSerializer 
@@ -23,11 +23,15 @@ def properties_list(request):
     favorites = []
     properties = Property.objects.all()
 
+    is_favorites = request.GET.get('is_favorites', '')
     landlord_id = request.GET.get('landlord', '')
 
     if landlord_id:
         properties = properties.filter(landlord_id=landlord_id)
     
+    if is_favorites:
+        properties = properties.filter(favorited_in=[user])
+
     if user:
         for property in property:
             if user in property.favorited.all():
@@ -36,7 +40,7 @@ def properties_list(request):
     serializer = PropertiesListSerializer(properties, many=True)
     
     return JsonResponse({
-        'data': serializer.data
+        'data': serializer.data,
         'favorites': favorites
     })
 
@@ -100,7 +104,7 @@ def book_property(request, pk):
         )
 
         return JsonResponse({'success': True})
-    except
+    except:
         print('Error', e)
 
         return JsonResponse({'succes': False})
