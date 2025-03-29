@@ -23,13 +23,13 @@ class PropertiesDetailSerializer(serializers.ModelSerializer):
         model = Property
         fields = (
             'id',
-            'titulo',
-            'descripcion',
-            'precio por noche',
+            'title',
+            'description',
+            'price_per_night',
             'imagen_url',
-            'habitaciones',
-            'baños',
-            'invitados',
+            'bedrooms',
+            'bathrooms',
+            'guests',
             'landlord'
         )
 
